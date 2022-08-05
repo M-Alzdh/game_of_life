@@ -1,0 +1,5 @@
+make the function run automatically until stopped
+
+animate the function using an animated style
+
+make user inputs manually available through an interactive window

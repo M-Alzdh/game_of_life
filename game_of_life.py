@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 import random as rnd
 # if 2 or more cells are alive the cell will remain alive/come to life
 
-field1 = np.zeros((10, 10), np.int8)
-
-field1[3:5, 1] = 1
+field1 = np.random.choice(2, size = (10, 10), p = [0.8, 0.2] )
 
 shape = np.shape(field1)
 field2 = np.zeros(shape = shape)
@@ -24,16 +22,17 @@ for i in range(shape[0]):
         top = max(0,indx[1]+num_neighbor+1)
 
         selection = field1[left:right, bottom:top]
-
-        if np.sum(selection) >= 2:
+        if np.sum(selection) > 2:
             field2[i, j] = 1
+        
 
-print(field1, "\n", field2)
+fig = plt.figure()
+ax = fig.add_subplot(211)
 
-plt.imshow(field1)
-plt.show()
+plt.imshow(field1, cmap='binary')
+ax = fig.add_subplot(221)
 
-plt.imshow(field2)
+plt.imshow(field2, cmap='binary')
 plt.show()
 
 

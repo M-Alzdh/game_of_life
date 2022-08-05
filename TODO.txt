@@ -1,3 +1,7 @@
+exclude the focal cell from selection
+
+implement all four rules of the game
+
 make the function run automatically until stopped
 
 animate the function using an animated style

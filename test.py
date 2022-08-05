@@ -1,5 +1,3 @@
-import random as rnd
-from re import L
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -34,7 +32,7 @@ def game_of_life(x, generations = 100):
                                 
                 if first_step[i, j] == 1 and (sum == 2 or sum == 3):
                     next_step[i, j] = 1
-                elif first_step[i, j] == 0 and (sum == 3): 
+                elif first_step[i, j] == 0 and sum == 3: 
                     next_step[i, j] = 1
                 else:
                     next_step[i, j] = 0

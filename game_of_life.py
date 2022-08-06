@@ -2,14 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+## this is my own implementation of a Conway's game of life
+## it calculates all states to be plotted first and then plots them
+
+## importing inital states from 'ready_input_csv
 with open('ready_input_csv/acorn.csv') as file_name:
     input = np.loadtxt(file_name, delimiter=',')
 
-
+## generating a random inital state
 x = np.random.choice(2, (100, 100), p = [0.8, 0.2])
 
+#set the number of generations
+n_generations = 10
 
-def game_of_life(x, generations = 100):
+def game_of_life(x, generations = 10):
     imagelist = []
     first_step = x
     imagelist.append(first_step)
@@ -41,16 +47,17 @@ def game_of_life(x, generations = 100):
         imagelist.append(next_step)
     return imagelist
 
-y = game_of_life(x, 200)
+## use "input" for imported initial state
+state_arrays = game_of_life(x, n_generations)
 
 fig = plt.figure()
-im = plt.imshow(y[0], cmap='binary')
+plot = plt.imshow(state_arrays[0], cmap='binary')
 
-def update(j):
-    im.set_array(y[j])
-    return [im]
+def update_plot(j):
+    plot.set_array(state_arrays[j])
+    return [plot]
 
-ani = animation.FuncAnimation(fig, update, frames=range(200), interval = 200, blit = True)
+ani = animation.FuncAnimation(fig, update_plot, frames=range(n_generations), interval = 200, blit = True)
 plt.show()
 
 

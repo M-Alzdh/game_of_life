@@ -3,6 +3,10 @@ from matplotlib import animation
 from matplotlib.colors import ListedColormap
 import numpy as np
 
+## this code is copied from 
+## https://stackoverflow.com/questions/70019538/simple-animation-for-conways-game-of-life-with-funcanimation
+## it is more efficient sice it does not calculate all states of the system before plotting
+
 grid, grid_size, img_plot = None, None, None
 
 def initialize(size):

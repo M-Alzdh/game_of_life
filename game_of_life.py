@@ -1,60 +1,57 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import random as rnd
-# if 2 or more cells are alive the cell will remain alive/come to life
+import matplotlib.animation as animation
 
-field1 = np.random.choice(2, size = (10, 10), p = [0.8, 0.2] )
+with open('ready_input_csv/acorn.csv') as file_name:
+    input = np.loadtxt(file_name, delimiter=',')
 
-shape = np.shape(field1)
-field2 = np.zeros(shape = shape)
 
-num_neighbor = 1
+x = np.random.choice(2, (100, 100), p = [0.8, 0.2])
 
-for i in range(shape[0]):
-    for j in range(shape[1]):
-
-        indx = [i, j]
-        
-        left = max(0, indx[0]-num_neighbor)
-        right = max(0, indx[0]+num_neighbor+1)
-
-        bottom = max(0,indx[1]-num_neighbor)
-        top = max(0,indx[1]+num_neighbor+1)
-
-        selection = field1[left:right, bottom:top]
-        if np.sum(selection) > 2:
-            field2[i, j] = 1
-        
-
-fig = plt.figure()
-ax = fig.add_subplot(211)
-
-plt.imshow(field1, cmap='binary')
-ax = fig.add_subplot(212)
-
-plt.imshow(field2, cmap='binary')
-plt.show()
 
 def game_of_life(x, generations = 100):
-    
+    imagelist = []
+    first_step = x
+    imagelist.append(first_step)
     shape = np.shape(x)
-    next_step = np.zeros(shape = shape)
     num_neighbor = 1
+    for x in range(generations):
+        next_step = np.zeros(shape = shape)
+        for i in range(shape[0]):
+            for j in range(shape[1]):
 
-    for i in range(shape[0]):
-        for j in range(shape[1]):
+                indx = [i, j]
+                
+                left = max(0, indx[0]-num_neighbor)
+                right = max(0, indx[0]+num_neighbor+1)
 
-            indx = [i, j]
-            
-            left = max(0, indx[0]-num_neighbor)
-            right = max(0, indx[0]+num_neighbor+1)
+                bottom = max(0,indx[1]-num_neighbor)
+                top = max(0,indx[1]+num_neighbor+1)
 
-            bottom = max(0,indx[1]-num_neighbor)
-            top = max(0,indx[1]+num_neighbor+1)
+                selection = first_step[left:right, bottom:top]
+                sum = (np.sum(selection))- first_step[i, j]
+                                
+                if first_step[i, j] == 1 and (sum == 2 or sum == 3):
+                    next_step[i, j] = 1
+                elif first_step[i, j] == 0 and sum == 3: 
+                    next_step[i, j] = 1
+                else:
+                    next_step[i, j] = 0
+        first_step = next_step
+        imagelist.append(next_step)
+    return imagelist
 
-            selection = field1[left:right, bottom:top]
-            if np.sum(selection) > 2:
-                next_step[i, j] = 1
-            return(next_step)
+y = game_of_life(x, 200)
+
+fig = plt.figure()
+im = plt.imshow(y[0], cmap='binary')
+
+def update(j):
+    im.set_array(y[j])
+    return [im]
+
+ani = animation.FuncAnimation(fig, update, frames=range(200), interval = 200, blit = True)
+plt.show()
+
 
 

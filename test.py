@@ -1,5 +1,11 @@
+from operator import concat
 import numpy as np
 import matplotlib.pyplot as plt
+
+with open('Conway.csv') as file_name:
+    cway = np.loadtxt(file_name, delimiter=',')
+
+print(cway)
 
 x = np.zeros((10, 10))
 x[1:4, 4] = 1
@@ -36,13 +42,10 @@ def game_of_life(x, generations = 100):
                     next_step[i, j] = 1
                 else:
                     next_step[i, j] = 0
-
+        file_path = 'image_' + str(x) + '.png'
+        print(file_name)
         first_step = next_step
-        print(x)
         plt.imshow(first_step, cmap='binary')
-        plt.show()
-        print(next_step, "\n")
+        plt.savefig(file_path)
         
 game_of_life(x)
-
-

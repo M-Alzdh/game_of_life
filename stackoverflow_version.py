@@ -46,4 +46,4 @@ def conway(random=True, size=100):
     plt.show()
     return ani
 
-conway(size=200)
+conway(size=100)

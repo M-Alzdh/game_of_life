@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+import plotly.express as px
+import plotly.graph_objs as go
 
 ## this is my own implementation of a Conway's game of life
 ## it calculates all states to be plotted first and then plots them
@@ -10,10 +10,10 @@ with open('ready_input_csv/acorn.csv') as file_name:
     input = np.loadtxt(file_name, delimiter=',')
 
 ## generating a random inital state
-x = np.random.choice(2, (100, 100), p = [0.8, 0.2])
+x = np.random.choice(2, (50, 50), p = [0.8, 0.2])
 
 #set the number of generations
-n_generations = 400
+n_generations = 20
 
 def game_of_life(x, generations = 10):
     imagelist = []
@@ -50,15 +50,31 @@ def game_of_life(x, generations = 10):
 ## use "input" for imported initial state
 state_arrays = game_of_life(x, n_generations)
 
-fig = plt.figure()
-plot = plt.imshow(state_arrays[0], cmap='binary')
+fig = go.Figure(
+    data=[go.Heatmap(z=state_arrays[0])],
+    layout=go.Layout(
+        title="Frame 0",
+        title_x=0.5,
+        updatemenus=[dict(
+            type="buttons",
+            buttons=[dict(label="Play",
+                          method="animate",
+                          args=[None]),
+                    dict(label="Pause",
+                         method="animate",
+                         args=[None,
+                               {"frame": {"duration": 0, "redraw": False},
+                                "mode": "immediate",
+                                "transition": {"duration": 0}}],
+                         )])]
+    ),
+    frames=[go.Frame(data=[go.Heatmap(z=state_arrays[i])],
+                     layout=go.Layout(title_text=f"Frame {i}")) 
+            for i in range(1, n_generations)]
+)
 
-def update_plot(j):
-    plot.set_array(state_arrays[j])
-    return [plot]
+fig.update_layout(showlegend=False)
 
-ani = animation.FuncAnimation(fig, update_plot, frames=range(n_generations), interval = 200, blit = True)
-plt.show()
+fig.update_traces(showlegend=False)
 
-
-
+fig.show()

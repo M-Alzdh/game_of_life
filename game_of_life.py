@@ -6,14 +6,15 @@ import matplotlib.animation as animation
 ## it calculates all states to be plotted first and then plots them
 
 ## importing inital states from 'ready_input_csv
-with open('ready_input_csv/acorn.csv') as file_name:
+with open(r'game_of_life\ready_input_csv\acorn.csv') as file_name:
     input = np.loadtxt(file_name, delimiter=',')
 
-## generating a random inital state
-x = np.random.choice(2, (100, 100), p = [0.8, 0.2])
 
+## generating a random inital state
+x = np.random.choice(2, (10, 10), p = [0.8, 0.2])
+padded = np.pad(input, ((100, 100), (100, 100)), 'constant', constant_values = (0, 0) )
 #set the number of generations
-n_generations = 400
+n_generations = 500
 
 def game_of_life(x, generations = 10):
     imagelist = []
@@ -48,7 +49,7 @@ def game_of_life(x, generations = 10):
     return imagelist
 
 ## use "input" for imported initial state
-state_arrays = game_of_life(x, n_generations)
+state_arrays = game_of_life(padded, n_generations)
 
 fig = plt.figure()
 plot = plt.imshow(state_arrays[0], cmap='binary')
@@ -57,7 +58,7 @@ def update_plot(j):
     plot.set_array(state_arrays[j])
     return [plot]
 
-ani = animation.FuncAnimation(fig, update_plot, frames=range(n_generations), interval = 200, blit = True)
+ani = animation.FuncAnimation(fig, update_plot, frames=range(n_generations), interval = 50, blit = True)
 plt.show()
 
 

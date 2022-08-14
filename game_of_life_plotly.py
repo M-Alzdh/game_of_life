@@ -13,7 +13,7 @@ with open('ready_input_csv/acorn.csv') as file_name:
 x = np.random.choice(2, (50, 50), p = [0.8, 0.2])
 
 #set the number of generations
-n_generations = 20
+n_generations = 23
 
 def game_of_life(x, generations = 10):
     imagelist = []

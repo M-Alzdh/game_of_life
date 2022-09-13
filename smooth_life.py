@@ -13,12 +13,16 @@ with open(r'game_of_life\ready_input_csv\worms.csv') as file_name:
 filter_array = np.array(([0.8, -0.85, 0.8], [-0.85, -0.2, -0.85], [0.8, -0.85, 0.8]))
 filter_slime = np.array(([0.8, -0.85, 0.8], [-0.85, -0.2, -0.85], [0.8, -0.85, 0.8]))
 filter_waves = np.array(([0.565, -0.716, 0.565], [-0.716, 0.627, -0.716], [0.565, -0.716, 0.565]))
+filter_worms = np.array(([0.68, -0.9, 0.68], [-0.9, -0.66, -0.9], [0.68, -0.9, 0.68]))
 
 def activation_func(x):
     return -1/(0.89*(x**2)+1)+1
 
 def waves_activation(x):
     return abs(1.2*x)
+
+def worms_activation(x):
+    return -1/(2**(0.6*(x**2)))+1
 
 def clip(x):
     if x>1:
@@ -28,11 +32,11 @@ def clip(x):
     return x
 
 ## generating a random inital state
-x = np.random.choice(2, (150, 150), p = [0.8, 0.2])
+x = np.random.choice(2, (100, 100), p = [0.8, 0.2])
 init_worm = np.random.choice([0, 1], (50, 50), p = (0.8, 0.2))
 padded = np.pad(x, ((1, 1), (1, 1)), 'constant', constant_values = (0, 0) )
 #set the number of generations
-n_generations = 1000
+n_generations = 500
 
 def game_of_life(x, generations = 10):
     imagelist = []
@@ -54,9 +58,9 @@ def game_of_life(x, generations = 10):
                 top = max(0,indx[1]+num_neighbor+1)
 
                 selection = first_step[left:right, bottom:top]
-                filtered = selection*filter_slime
+                filtered = selection*filter_worms
                 sum = np.sum(filtered)#- first_step[i, j]
-                activated = clip(activation_func(sum))
+                activated = clip(worms_activation(sum))
                                 
                 next_step[i, j] = activated
         first_step = next_step
@@ -80,7 +84,8 @@ ani = animation.FuncAnimation(fig, update_plot, frames=range(len(state_arrays)),
 plt.show()
 
 
-
+'''
 f = r"c://Users/Haji/Desktop/animation5.gif" 
 writergif = animation.PillowWriter(fps=60) 
 ani.save(f, writer=writergif)
+'''

@@ -28,7 +28,7 @@ def clip(x):
     return x
 
 ## generating a random inital state
-x = np.random.choice(2, (200, 200), p = [0.8, 0.2])
+x = np.random.choice(2, (150, 150), p = [0.8, 0.2])
 init_worm = np.random.choice([0, 1], (50, 50), p = (0.8, 0.2))
 padded = np.pad(x, ((1, 1), (1, 1)), 'constant', constant_values = (0, 0) )
 #set the number of generations
@@ -54,9 +54,9 @@ def game_of_life(x, generations = 10):
                 top = max(0,indx[1]+num_neighbor+1)
 
                 selection = first_step[left:right, bottom:top]
-                filtered = selection*filter_waves
+                filtered = selection*filter_slime
                 sum = np.sum(filtered)#- first_step[i, j]
-                activated = clip(waves_activation(sum))
+                activated = clip(activation_func(sum))
                                 
                 next_step[i, j] = activated
         first_step = next_step
@@ -65,24 +65,22 @@ def game_of_life(x, generations = 10):
 
 ## use "input" for imported initial state
 state_arrays = game_of_life(padded, n_generations)
+state_arrays = state_arrays[::4]
 
+fig = plt.figure(frameon= False)
 
-
-fig = plt.figure()
-plot = plt.imshow(state_arrays[0], cmap='copper')
-ax = plt.gca()
-
-ax.axes.xaxis.set_visible(False)
-ax.axes.yaxis.set_visible(False)
+plot = plt.imshow(state_arrays[0], cmap='viridis')
+plt.axis('off')
 
 def update_plot(j):
     plot.set_array(state_arrays[j])
     return [plot]
 
-ani = animation.FuncAnimation(fig, update_plot, frames=range(n_generations), interval = 100, blit = True)
+ani = animation.FuncAnimation(fig, update_plot, frames=range(len(state_arrays)), interval = 50, blit = True)
 plt.show()
 
 
-f = r"c://Users/Haji/Desktop/animation3.gif" 
-writergif = animation.PillowWriter(fps=30) 
+
+f = r"c://Users/Haji/Desktop/animation5.gif" 
+writergif = animation.PillowWriter(fps=60) 
 ani.save(f, writer=writergif)
